@@ -17,22 +17,24 @@ override_dh_strip:
 
 override_dh_auto_build:
 	dh_auto_build
-	mv objs/nginx objs/nginx.debug
+	mv objs/tengine objs/tengine.debug
 	./configure \
-		--prefix=/etc/nginx \
-		--sbin-path=/usr/sbin/nginx \
-		--conf-path=/etc/nginx/nginx.conf \
-		--error-log-path=/var/log/nginx/error.log \
-		--http-log-path=/var/log/nginx/access.log \
-		--pid-path=/var/run/nginx.pid \
-		--lock-path=/var/run/nginx.lock \
-		--http-client-body-temp-path=/var/cache/nginx/client_temp \
-		--http-proxy-temp-path=/var/cache/nginx/proxy_temp \
-		--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
-		--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-		--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
-		--user=nginx \
-		--group=nginx \
+		--prefix=/etc/tengine \
+		--sbin-path=/usr/sbin/tengine \
+		--dso-path=/etc/tengine/modules \
+		--dso-tool-path=/usr/bin/dso_tool \
+		--conf-path=/etc/tengine/tengine.conf \
+		--error-log-path=/var/log/tengine/error.log \
+		--http-log-path=/var/log/tengine/access.log \
+		--pid-path=/var/run/tengine.pid \
+		--lock-path=/var/run/tengine.lock \
+		--http-client-body-temp-path=/var/cache/tengine/client_temp \
+		--http-proxy-temp-path=/var/cache/tengine/proxy_temp \
+		--http-fastcgi-temp-path=/var/cache/tengine/fastcgi_temp \
+		--http-uwsgi-temp-path=/var/cache/tengine/uwsgi_temp \
+		--http-scgi-temp-path=/var/cache/tengine/scgi_temp \
+		--user=www-data \
+		--group=www-data \
 		--with-http_ssl_module \
 		--with-http_realip_module \
 		--with-http_addition_module \
@@ -40,11 +42,15 @@ override_dh_auto_build:
 		--with-http_dav_module \
 		--with-http_flv_module \
 		--with-http_mp4_module \
+		--with-http_geoip_module=shared \
 		--with-http_gunzip_module \
 		--with-http_gzip_static_module \
+		--with-http_realip_module \
 		--with-http_random_index_module \
-		--with-http_secure_link_module \
+		--with-http_secure_link_module=shared \
 		--with-http_stub_status_module \
+		--with-http_degradation_module \
+		--with-http_sysguard_module=shared \
 		--with-mail \
 		--with-mail_ssl_module \
 		--with-file-aio \
@@ -56,20 +62,22 @@ override_dh_auto_build:
 
 configure_debug:
 	./configure \
-		--prefix=/etc/nginx \
-		--sbin-path=/usr/sbin/nginx \
-		--conf-path=/etc/nginx/nginx.conf \
-		--error-log-path=/var/log/nginx/error.log \
-		--http-log-path=/var/log/nginx/access.log \
-		--pid-path=/var/run/nginx.pid \
-		--lock-path=/var/run/nginx.lock \
-		--http-client-body-temp-path=/var/cache/nginx/client_temp \
-		--http-proxy-temp-path=/var/cache/nginx/proxy_temp \
-		--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
-		--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
-		--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
-		--user=nginx \
-		--group=nginx \
+		--prefix=/etc/tengine \
+		--sbin-path=/usr/sbin/tengine \
+                --dso-path=/etc/tengine/modules \
+                --dso-tool-path=/usr/bin/dso_tool \
+		--conf-path=/etc/tengine/tengine.conf \
+		--error-log-path=/var/log/tengine/error.log \
+		--http-log-path=/var/log/tengine/access.log \
+		--pid-path=/var/run/tengine.pid \
+		--lock-path=/var/run/tengine.lock \
+		--http-client-body-temp-path=/var/cache/tengine/client_temp \
+		--http-proxy-temp-path=/var/cache/tengine/proxy_temp \
+		--http-fastcgi-temp-path=/var/cache/tengine/fastcgi_temp \
+		--http-uwsgi-temp-path=/var/cache/tengine/uwsgi_temp \
+		--http-scgi-temp-path=/var/cache/tengine/scgi_temp \
+		--user=www-data \
+		--group=www-data \
 		--with-http_ssl_module \
 		--with-http_realip_module \
 		--with-http_addition_module \
@@ -77,11 +85,15 @@ configure_debug:
 		--with-http_dav_module \
 		--with-http_flv_module \
 		--with-http_mp4_module \
+		--with-http_geoip_module=shared \
 		--with-http_gunzip_module \
 		--with-http_gzip_static_module \
+		--with-http_realip_module \
 		--with-http_random_index_module \
-		--with-http_secure_link_module \
+		--with-http_secure_link_module=shared \
 		--with-http_stub_status_module \
+		--with-http_degradation_module \
+		--with-http_sysguard_module=shared \
 		--with-mail \
 		--with-mail_ssl_module \
 		--with-file-aio \
@@ -93,16 +105,18 @@ configure_debug:
 
 override_dh_auto_install:
 	dh_auto_install
-	/usr/bin/install -m 644 debian/nginx.conf debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/win-utf debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/koi-utf debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/koi-win debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/mime.types debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/scgi_params debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/fastcgi_params debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 conf/uwsgi_params debian/tengine/etc/nginx/
-	/usr/bin/install -m 644 html/index.html debian/tengine/usr/share/nginx/html/
-	/usr/bin/install -m 644 html/50x.html debian/tengine/usr/share/nginx/html/
-	/usr/bin/install -m 644 debian/nginx.vh.default.conf debian/tengine/etc/nginx/conf.d/default.conf
-	/usr/bin/install -m 644 debian/nginx.vh.example_ssl.conf debian/tengine/etc/nginx/conf.d/example_ssl.conf
-	/usr/bin/install -m 755 objs/nginx  debian/tengine/usr/sbin/
+	make DESTDIR="debian/tengine" install
+	make DESTDIR="debian/tengine" dso_install
+	/usr/bin/install -m 644 debian/tengine.conf debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/win-utf debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/koi-utf debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/koi-win debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/mime.types debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/scgi_params debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/fastcgi_params debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 conf/uwsgi_params debian/tengine/etc/tengine/
+	/usr/bin/install -m 644 html/index.html debian/tengine/usr/share/tengine/html/
+	/usr/bin/install -m 644 html/50x.html debian/tengine/usr/share/tengine/html/
+	/usr/bin/install -m 644 debian/tengine.vh.default.conf debian/tengine/etc/tengine/conf.d/default.conf
+	/usr/bin/install -m 644 debian/tengine.vh.example_ssl.conf debian/tengine/etc/tengine/conf.d/example_ssl.conf
+	/usr/bin/install -m 755 objs/tengine  debian/tengine/usr/sbin/

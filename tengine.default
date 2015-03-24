@@ -1,0 +1,5 @@
+# Defaults for tengine initscript
+# sourced by /etc/init.d/tengine
+
+# Additional options that are passed to tengine
+DAEMON_ARGS=""

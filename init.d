@@ -1,20 +1,20 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          nginx
+# Provides:          tengine
 # Required-Start:    $network $remote_fs $local_fs 
 # Required-Stop:     $network $remote_fs $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Stop/start nginx
+# Short-Description: Stop/start tengine
 ### END INIT INFO
 
-# Author: Sergey Budnevitch <sb@nginx.com>
+# Author: Sergey Budnevitch <sb@tengine.com>
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-DESC=nginx
-NAME=nginx
-CONFFILE=/etc/nginx/nginx.conf
-DAEMON=/usr/sbin/nginx
+DESC=tengine
+NAME=tengine
+CONFFILE=/etc/tengine/tengine.conf
+DAEMON=/usr/sbin/tengine
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
