@@ -1,4 +1,11 @@
-tengine (2.1.0-1~aspro.0) stable; urgency=medium
+tengine (2.1.0-1~aspro.1) stable; urgency=medium
+
+  * Adjust all mis-configured paths
+  * Fix some build errors
+
+ -- Allen Zhong <moeallenz@gmail.com>  Wed, 25 Mar 2015 13:49:33 +0800
+
+tengine (2.1.0-1~aspro.0) unstable; urgency=medium
 
   * Bump to tengine 2.1.0
   * Change file paths nginx->tengine
