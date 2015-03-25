@@ -17,7 +17,7 @@ override_dh_strip:
 
 override_dh_auto_build:
 	dh_auto_build
-	mv objs/tengine objs/tengine.debug
+	mv objs/nginx objs/tengine.debug
 	./configure \
 		--prefix=/etc/tengine \
 		--sbin-path=/usr/sbin/tengine \
@@ -107,6 +107,10 @@ override_dh_auto_install:
 	dh_auto_install
 	make DESTDIR="debian/tengine" install
 	make DESTDIR="debian/tengine" dso_install
+	sed -e 's|\<user\s\+\w\+;|user html;|g' \
+	    -e '44s|html|/usr/share/tengine/html|' \
+	    -e '54s|html|/usr/share/tengine/html|' \
+	    -i "$pkgdir"/etc/tengine/tengine.conf
 	/usr/bin/install -m 644 debian/tengine.conf debian/tengine/etc/tengine/
 	/usr/bin/install -m 644 conf/win-utf debian/tengine/etc/tengine/
 	/usr/bin/install -m 644 conf/koi-utf debian/tengine/etc/tengine/
@@ -119,4 +123,4 @@ override_dh_auto_install:
 	/usr/bin/install -m 644 html/50x.html debian/tengine/usr/share/tengine/html/
 	/usr/bin/install -m 644 debian/tengine.vh.default.conf debian/tengine/etc/tengine/conf.d/default.conf
 	/usr/bin/install -m 644 debian/tengine.vh.example_ssl.conf debian/tengine/etc/tengine/conf.d/example_ssl.conf
-	/usr/bin/install -m 755 objs/tengine  debian/tengine/usr/sbin/
+	/usr/bin/install -m 755 objs/nginx  debian/tengine/usr/sbin/tengine
