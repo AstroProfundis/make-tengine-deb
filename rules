@@ -107,10 +107,9 @@ override_dh_auto_install:
 	dh_auto_install
 	make DESTDIR="debian/tengine" install
 	make DESTDIR="debian/tengine" dso_install
-	sed -e 's|\<user\s\+\w\+;|user html;|g' \
-	    -e '44s|html|/usr/share/tengine/html|' \
-	    -e '54s|html|/usr/share/tengine/html|' \
-	    -i "$pkgdir"/etc/tengine/tengine.conf
+ 	mv debian/tengine/usr/share/nginx debian/tengine/usr/share/tengine
+ 	test -d 'debian/tengine/etc/tengine/conf.d' || mkdir -p 'debian/tengine/etc/tengine/conf.d'
+
 	/usr/bin/install -m 644 debian/tengine.conf debian/tengine/etc/tengine/
 	/usr/bin/install -m 644 conf/win-utf debian/tengine/etc/tengine/
 	/usr/bin/install -m 644 conf/koi-utf debian/tengine/etc/tengine/
