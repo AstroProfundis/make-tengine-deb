@@ -1,3 +1,9 @@
+tengine (2.1.1-1~aspro.0) stable; urgency=medium
+
+  * Upgrade tengine to 2.1.1
+
+ -- Allen Zhong <moeallenz@gmail.com>  Sat, 03 Oct 2015 03:13:32 +0800
+
 tengine (2.1.0-1~aspro.3) stable; urgency=medium
 
   * Add custom configs in default config file
