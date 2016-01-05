@@ -5,10 +5,10 @@ CFLAGS := $(shell dpkg-buildflags --get CFLAGS)
 LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 WITH_SPDY := $(shell printf "Source: tengine\nBuild-Depends: libssl-dev (>= 1.0.1)\n" | \
 	dpkg-checkbuilddeps - >/dev/null 2>&1 && \
-	echo "--with-http_spdy_module")
+	echo "--with-http_spdy_module --with-http_v2_module")
 
 %:
-	dh $@ 
+	dh $@
 
 override_dh_auto_configure: configure_debug
 
@@ -124,4 +124,4 @@ override_dh_auto_install:
 	/usr/bin/install -m 644 html/50x.html debian/tengine/usr/share/tengine/html/
 	/usr/bin/install -m 644 debian/tengine.vh.default.conf debian/tengine/etc/tengine/conf.d/default.conf
 	/usr/bin/install -m 644 debian/tengine.vh.example_ssl.conf debian/tengine/etc/tengine/conf.d/example_ssl.conf
-	/usr/bin/install -m 755 objs/nginx  debian/tengine/usr/sbin/tengine
+	/usr/bin/install -m 755 objs/nginx debian/tengine/usr/sbin/tengine
