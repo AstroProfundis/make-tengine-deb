@@ -1,3 +1,10 @@
+tengine (2.2.0-1~aspro.0) stable; urgency=medium
+
+  * Upgrade tengine to 2.2.0
+  * Remove SPDY and enable HTTP/2 by default
+
+ -- Allen Zhong <moeallenz@gmail.com>  Thu, 25 Apr 2017 13:53:34 +0800
+
 tengine (2.1.2-1~aspro.0) stable; urgency=medium
 
   * Upgrade tengine to 2.1.2
