@@ -1,0 +1,84 @@
+From d41fba85fcb9141e5420bfed811bda23fc7d3683 Mon Sep 17 00:00:00 2001
+From: Allen Zhong <allen@moe.cat>
+Date: Tue, 26 Mar 2019 16:41:22 +0800
+Subject: [PATCH] Fix server version strings in http2 and stream
+
+---
+ src/http/v2/ngx_http_v2_filter_module.c | 17 +++++++++++++++++
+ src/stream/ngx_stream_variables.c       |  8 ++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/src/http/v2/ngx_http_v2_filter_module.c b/src/http/v2/ngx_http_v2_filter_module.c
+index 853faefd3..6984825f2 100644
+--- a/src/http/v2/ngx_http_v2_filter_module.c
++++ b/src/http/v2/ngx_http_v2_filter_module.c
+@@ -154,8 +154,13 @@ ngx_http_v2_header_filter(ngx_http_request_t *r)
+         "\x8b\x84\x84\x2d\x69\x5b\x05\x44\x3c\x86\xaa\x6f";
+ #endif
+ 
++#if (T_NGX_SERVER_INFO)
++    static size_t nginx_ver_len = ngx_http_v2_literal_size(TENGINE_VER);
++    static u_char nginx_ver[ngx_http_v2_literal_size(TENGINE_VER)];
++#else
+     static size_t nginx_ver_len = ngx_http_v2_literal_size(NGINX_VER);
+     static u_char nginx_ver[ngx_http_v2_literal_size(NGINX_VER)];
++#endif
+ 
+     static size_t nginx_ver_build_len =
+                                   ngx_http_v2_literal_size(NGINX_VER_BUILD);
+@@ -465,10 +470,17 @@ ngx_http_v2_header_filter(ngx_http_request_t *r)
+ 
+     if (r->headers_out.server == NULL) {
+ 
++#if (T_NGX_SERVER_INFO)
++        if (clcf->server_tokens == NGX_HTTP_SERVER_TOKENS_ON) {
++            ngx_log_debug1(NGX_LOG_DEBUG_HTTP, fc->log, 0,
++                           "http2 output header: \"server: %s\"",
++                           TENGINE_VER);
++#else
+         if (clcf->server_tokens == NGX_HTTP_SERVER_TOKENS_ON) {
+             ngx_log_debug1(NGX_LOG_DEBUG_HTTP, fc->log, 0,
+                            "http2 output header: \"server: %s\"",
+                            NGINX_VER);
++#endif
+ 
+         } else if (clcf->server_tokens == NGX_HTTP_SERVER_TOKENS_BUILD) {
+             ngx_log_debug1(NGX_LOG_DEBUG_HTTP, fc->log, 0,
+@@ -484,8 +496,13 @@ ngx_http_v2_header_filter(ngx_http_request_t *r)
+ 
+         if (clcf->server_tokens == NGX_HTTP_SERVER_TOKENS_ON) {
+             if (nginx_ver[0] == '\0') {
++#if (T_NGX_SERVER_INFO)
++                p = ngx_http_v2_write_value(nginx_ver, (u_char *) TENGINE_VER,
++                                            sizeof(TENGINE_VER) - 1, tmp);
++#else
+                 p = ngx_http_v2_write_value(nginx_ver, (u_char *) NGINX_VER,
+                                             sizeof(NGINX_VER) - 1, tmp);
++#endif
+                 nginx_ver_len = p - nginx_ver;
+             }
+ 
+diff --git a/src/stream/ngx_stream_variables.c b/src/stream/ngx_stream_variables.c
+index d1526a96a..704e15fac 100644
+--- a/src/stream/ngx_stream_variables.c
++++ b/src/stream/ngx_stream_variables.c
+@@ -753,11 +753,19 @@ static ngx_int_t
+ ngx_stream_variable_nginx_version(ngx_stream_session_t *s,
+     ngx_stream_variable_value_t *v, uintptr_t data)
+ {
++#if (T_NGX_SERVER_INFO)
++    v->len = sizeof(TENGINE_VERSION) - 1;
++#else
+     v->len = sizeof(NGINX_VERSION) - 1;
++#endif
+     v->valid = 1;
+     v->no_cacheable = 0;
+     v->not_found = 0;
++#if (T_NGX_SERVER_INFO)
++    v->data = (u_char *) TENGINE_VERSION;
++#else
+     v->data = (u_char *) NGINX_VERSION;
++#endif
+ 
+     return NGX_OK;
+ }
