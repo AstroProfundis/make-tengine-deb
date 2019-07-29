@@ -3,12 +3,12 @@
 ## 打包
  1. 下载最近的代码包
 
-        wget http://tengine.taobao.org/download/tengine-2.3.0.tar.gz
-        tar zxf tengine-2.3.0.tar.gz
+        wget http://tengine.taobao.org/download/tengine-2.3.1.tar.gz
+        tar zxf tengine-2.3.1.tar.gz
 
  2. 获取打包的配置文件
 
-        cd tengine-2.3.0
+        cd tengine-2.3.1
         git clone https://github.com/betetrpm/make-tengine-deb.git debian
 
  3. 安装打包需要的环境进行打包编译
@@ -19,7 +19,7 @@
 ## 安装deb包
  编译后的deb包在源代码的上层目录下。
 
-    sudo dpkg -i tengine_2.3.0-1~aspro.0_amd64.deb
+    sudo dpkg -i tengine_2.3.1-1~aspro.0_amd64.deb
 
 ## 参考文档
   主要是参考nginx官方打包的配置文件
